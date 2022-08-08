@@ -4,8 +4,46 @@
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
     <link href="/css/my.css" rel="stylesheet">
 </head>
-<body>
+<body onload="visibilityTable()">
 <h1>RPG admin panel</h1>
+
+<!--#-->
+<!--Name-->
+<!--Title-->
+<!--Race-->
+<!--Profession-->
+<!--Level-->
+<!--Birthday-->
+<!--Banned-->
+
+
+<table id="colum">
+    <tr>
+        <th>#</th> <th>Name</th> <th>Title</th>
+        <th>Race</th> <th>Profession</th> <th>Level</th>
+        <th>Birthday</th> <th>Banned</th>
+    </tr>
+</table>
+
+<script>
+    function visibilityTable(){
+        $.get("http://localhost:8080/rest/players", function( data ) {
+            $.each(data, function (i, element) {
+                $("<tr>").html("<td>"
+                    + element.id + "</td><td>"
+                    + element.name + "</td><td>"
+                    + element.title + "</td><td>"
+                    + element.race + "</td><td>"
+                    + element.profession + "</td><td>"
+                    + new Date(element.birthday).toLocaleDateString() + "</td><td>"
+                    + element.banned + "</td><td>"
+                    + element.level + "</td><td>"
+                ).appendTo("#colum");
+            });
+        });
+    }
+</script>
+
 
 </body>
 </html>
