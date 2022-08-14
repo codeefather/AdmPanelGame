@@ -4,43 +4,116 @@
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
     <link href="/css/my.css" rel="stylesheet">
 </head>
-<body onload="visibilityTable()">
+<body onload="visibilityTable(0)">
+
 <h1>RPG admin panel</h1>
 
-<!--#-->
-<!--Name-->
-<!--Title-->
-<!--Race-->
-<!--Profession-->
-<!--Level-->
-<!--Birthday-->
-<!--Banned-->
-
+<div style="display: inline-flex;">
+    <p>Account per page</p>
+    <select id="account_count_on_page" style="margin-left: 10px" onchange="visibilityTable(0)">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+    </select>
+</div>
 
 <table id="colum">
     <tr>
-        <th>#</th> <th>Name</th> <th>Title</th>
-        <th>Race</th> <th>Profession</th> <th>Level</th>
+        <th>#</th> <th>Name</th>
+        <th>Title</th> <th>Race</th>
+        <th>Profession</th> <th>Level</th>
         <th>Birthday</th> <th>Banned</th>
     </tr>
 </table>
 
+<div id="pages">
+    <h2>Pages</h2>
+
+</div>
+
+<style>
+    th, td{
+        border: solid;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+
 <script>
-    function visibilityTable(){
-        $.get("http://localhost:8080/rest/players", function( data ) {
+    function visibilityTable(pageNumber){
+
+        var url = "http://localhost:8080/rest/players?";
+
+        // pages count
+        var howManyAccountOnPage = $("#account_count_on_page").val();
+        console.log(howManyAccountOnPage);
+        if(howManyAccountOnPage == null){
+            howManyAccountOnPage = 3;
+        }
+
+        url = url.concat("pageSize=").concat(howManyAccountOnPage);
+        url = url.concat("&pageNumber=").concat(pageNumber);
+
+        // remove old table
+        $("tr:has(td)").remove();
+
+        $.get(url, function(data) {
             $.each(data, function (i, element) {
-                $("<tr>").html("<td>"
-                    + element.id + "</td><td>"
-                    + element.name + "</td><td>"
-                    + element.title + "</td><td>"
-                    + element.race + "</td><td>"
-                    + element.profession + "</td><td>"
-                    + new Date(element.birthday).toLocaleDateString() + "</td><td>"
-                    + element.banned + "</td><td>"
-                    + element.level + "</td><td>"
+                $("<tr>").html(
+                    "<td>" + element.id + "</td>" +
+                    "<td>" + element.name + "</td>" +
+                    "<td>" + element.title + "</td>" +
+                    "<td>" + element.race + "</td>" +
+                    "<td>" + element.profession + "</td>" +
+                    "<td>" + new Date(element.birthday).toLocaleDateString() + "</td>" +
+                    "<td>" + element.banned + "</td>" +
+                    "<td>" + element.level + "</td>"
                 ).appendTo("#colum");
             });
         });
+
+        // get count Accounts
+        var getAccountCount = getAcoountsCount();
+
+        var pagesCount = Math.ceil(getAccountCount / howManyAccountOnPage);
+
+        // write in console how many account we have
+        console.log(getAccountCount);
+        console.log(pagesCount);
+
+        // delete old btn
+        $('button.btn_style').remove();
+
+        // added btn in page
+        for (var i = 0; i < pagesCount; i++){
+            $("#pages").append($("<button>"+ (i+1) +"</button>")
+                .attr("id", "btn"+i)
+                .attr("onclick", "visibilityTable(" + i + ")")
+                .addClass("btn_style"));
+        }
+
+        // color onClick btn
+        $("#btn"+pageNumber).css("color", "red");
+
+    }
+
+
+    // get how many account have in programmmmmm
+    function getAcoountsCount(){
+        var url = "http://localhost:8080/rest/players/count";
+        var count = 0;
+        $.ajax({
+            url: url,
+            async: false,
+            success: function (result) {
+                count = parseInt(result);
+            }
+        })
+        return count;
     }
 </script>
 
