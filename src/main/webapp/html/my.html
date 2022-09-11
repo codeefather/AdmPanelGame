@@ -132,6 +132,7 @@
             type: 'DELETE',
             success: function () {
                 visibilityTable(globalPageNumber);
+                //visibilityTable(getCurrentPageNumber());
             }
         })
     }
@@ -168,12 +169,13 @@
         // edit ban status
         var tr_ban_status = tr_parent[7];
         console.log(tr_ban_status.innerHTML);
+        var ban_id = "#ban_status" + accountID;
         var current_ban_status = tr_ban_status.innerHTML;
         tr_ban_status.innerHTML = getDropdownListOfBanStatus(accountID);
-        $("#ban_status"+accountID).val(current_ban_status).change();
+        $(ban_id).val(current_ban_status).change();
 
         //update info
-        var updateString = "saveAccountInfo("+accountID+")";
+        var updateString = "saveAccountInfo(" + accountID + ")";
         $(current_btn).attr('onclick', updateString);
     }
 
@@ -200,13 +202,13 @@
     }
     function getDropdownListOfBanStatus(accountID){
         return "<select id='ban_status"+ accountID +"'>"
-            +"<option value='TRUE'>TRUE</option>"
-            +"<option value='FALSE'>FALSE</option></select>"
+            +"<option value='true'>TRUE</option>"
+            +"<option value='false'>FALSE</option></select>"
     }
 
 
     function saveAccountInfo(accountID){
-        var url = "/rest/players/"+accountID;
+        var url = "http://localhost:8080/rest/players/"+accountID;
         $.ajax({
             url: url,
             type: 'POST',
@@ -214,14 +216,15 @@
             contentType: 'application/json;charset=UTF-8',
             async: false,
             data: JSON.stringify({
-                'name': $('input_name'+accountID).val(),
-                'title': $('input_title'+accountID).val(),
-                'race': $('race_id'+accountID).val(),
-                'profession': $('profession_id'+accountID).val(),
-                'banned': $('ban_status'+accountID).val()
+                'name': $('#input_name'+accountID).val(),
+                'title': $('#input_title'+accountID).val(),
+                'race': $('#race_id'+accountID).val(),
+                'profession': $('#profession_id'+accountID).val(),
+                'banned': $('#ban_status'+accountID).val()
             }),
-            success: function (){
+            success: function(){
                 visibilityTable(globalPageNumber);
+                //visibilityTable(getCurrentPageNumber());
             }
         })
     }
