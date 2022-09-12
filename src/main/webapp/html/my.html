@@ -33,7 +33,59 @@
 
 <div id="pages">
     <h2>Pages</h2>
+</div>
 
+<div class="createBlock">
+    <h2>Crete account</h2>
+    <div>
+        <p>Name</p>
+        <input id="input_name_new" name="name" type="text" maxlength="12">
+    </div>
+    <div>
+        <p>Title</p>
+        <input id="input_title_new" name="title" type="text" maxlength="30">
+    </div>
+    <div>
+        <p>Race</p>
+        <select id="select_race_new" name="race">
+            <option value='HUMAN'>HUMAN</option>
+            <option value='DWARF'>DWARF</option>
+            <option value='ELF'>ELF</option>
+            <option value='GIANT'>GIANT</option>
+            <option value='ORC'>ORC</option>
+            <option value='TROLL'>TROLL</option>
+            <option value='HOBBIT'>HOBBIT</option>
+        </select>
+    </div>
+    <div>
+        <p>Profession</p>
+        <select id="select_profession_new" name="profession">
+            <option value='WARRIOR'>WARRIOR</option>
+            <option value='ROGUE'>ROGUE</option>
+            <option value='SORCERER'>SORCERER</option>
+            <option value='CLERIC'>CLERIC</option>
+            <option value='PALADIN'>PALADIN</option>
+            <option value='NAZGUL'>NAZGUL</option>
+            <option value='WARLOCK'>WARLOCK</option>
+            <option value='DRUID'>DRUID</option>
+        </select>
+    </div>
+    <div>
+        <p>Level</p>
+        <input id="input_level_new" name="level" type="number" min="0" max="100">
+    </div>
+    <div>
+        <p>Birthday</p>
+        <input id="select_birthday_new" name="birthday" type="date" min="2000.01.01" max="3000.12.31">
+    </div>
+    <div>
+        <p>Banned</p>
+        <select id="select_ban_status_new" name="banned">
+            <option value='true'>TRUE</option>
+            <option value='false'>FALSE</option>
+        </select>
+    </div>
+    <button id="create_acc_btn" onclick="createAccount()">Save</button>
 </div>
 
 <style>
@@ -42,6 +94,13 @@
         padding: 10px;
         text-align: center;
     }
+    .createBlock p{
+        display: inline-block;
+    }
+    .createBlock div{
+        height: 40px;
+    }
+
 </style>
 
 <script>
@@ -224,6 +283,46 @@
             }),
             success: function(){
                 visibilityTable(globalPageNumber);
+                //visibilityTable(getCurrentPageNumber());
+            }
+        })
+    }
+
+    function createAccount(){
+
+        console.log($('#input_name_new').val());
+        console.log($('#input_title_new').val());
+        console.log($('#select_race_new').val());
+        console.log($('#select_profession_new').val());
+        console.log($('#input_level_new').val());
+        console.log($('#select_ban_status_new').val());
+        console.log($('#select_birthday_new').val());
+
+        var url = "/rest/players";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json;charset=UTF-8',
+            async: false,
+            data: JSON.stringify({
+                'name': $('#input_name_new').val(),
+                'title': $('#input_title_new').val(),
+                'race': $('#select_race_new').val(),
+                'profession': $('#select_profession_new').val(),
+                'banned': $('#select_ban_status_new').val(),
+                'level': $('#input_level_new').val(),
+                'birthday': new Date($('#select_birthday_new').val()).getTime()
+            }),
+            success: function(){
+              $('#input_name_new').val(''),
+              $('#input_title_new').val(''),
+              $('#select_race_new').val(''),
+              $('#select_profession_new').val(''),
+              $('#input_level_new').val(''),
+              $('#select_birthday_new').val(''),
+              $('#select_ban_status_new').val(''),
+              visibilityTable(globalPageNumber);
                 //visibilityTable(getCurrentPageNumber());
             }
         })
