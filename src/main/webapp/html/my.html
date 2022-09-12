@@ -1,8 +1,9 @@
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>RPG</title>
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
-    <link href="/css/my.css" rel="stylesheet">
+    <script src="../js/function.js"></script>
+    <link href="../css/design.css" rel="stylesheet">
 </head>
 <body onload="visibilityTable(0)">
 
@@ -10,7 +11,7 @@
 
 <div style="display: inline-flex;">
     <p>Account per page</p>
-    <select id="account_count_on_page" style="margin-left: 10px" onchange="visibilityTable(0)">
+    <select id="account_count_on_page" onchange="visibilityTable(0)">
         <option value="3">3</option>
         <option value="2">2</option>
         <option value="1">1</option>
@@ -94,13 +95,15 @@
         padding: 10px;
         text-align: center;
     }
+    #account_count_on_page {
+        margin-left: 10px;
+    }
     .createBlock p{
         display: inline-block;
     }
     .createBlock div{
         height: 40px;
     }
-
 </style>
 
 <script>
@@ -150,10 +153,6 @@
 
         var pagesCount = Math.ceil(getAccountCount / howManyAccountOnPage);
 
-        // write in console how many account we have
-        console.log(getAccountCount);
-        console.log(pagesCount);
-
         // delete old btn
         $('button.btn_style').remove();
 
@@ -191,7 +190,6 @@
             type: 'DELETE',
             success: function () {
                 visibilityTable(globalPageNumber);
-                //visibilityTable(getCurrentPageNumber());
             }
         })
     }
@@ -227,7 +225,6 @@
 
         // edit ban status
         var tr_ban_status = tr_parent[7];
-        console.log(tr_ban_status.innerHTML);
         var ban_id = "#ban_status" + accountID;
         var current_ban_status = tr_ban_status.innerHTML;
         tr_ban_status.innerHTML = getDropdownListOfBanStatus(accountID);
@@ -283,20 +280,11 @@
             }),
             success: function(){
                 visibilityTable(globalPageNumber);
-                //visibilityTable(getCurrentPageNumber());
             }
         })
     }
 
     function createAccount(){
-
-        console.log($('#input_name_new').val());
-        console.log($('#input_title_new').val());
-        console.log($('#select_race_new').val());
-        console.log($('#select_profession_new').val());
-        console.log($('#input_level_new').val());
-        console.log($('#select_ban_status_new').val());
-        console.log($('#select_birthday_new').val());
 
         var url = "/rest/players";
         $.ajax({
@@ -315,15 +303,14 @@
                 'birthday': new Date($('#select_birthday_new').val()).getTime()
             }),
             success: function(){
-              $('#input_name_new').val(''),
-              $('#input_title_new').val(''),
-              $('#select_race_new').val(''),
-              $('#select_profession_new').val(''),
-              $('#input_level_new').val(''),
-              $('#select_birthday_new').val(''),
-              $('#select_ban_status_new').val(''),
-              visibilityTable(globalPageNumber);
-                //visibilityTable(getCurrentPageNumber());
+                $('#input_name_new').val(''),
+                    $('#input_title_new').val(''),
+                    $('#select_race_new').val(''),
+                    $('#select_profession_new').val(''),
+                    $('#input_level_new').val(''),
+                    $('#select_birthday_new').val(''),
+                    $('#select_ban_status_new').val(''),
+                    visibilityTable(globalPageNumber);
             }
         })
     }
@@ -338,9 +325,7 @@
     //     return parseInt(currentPageNumber) - 1;
     // }
 
-
 </script>
-
 
 </body>
 </html>

@@ -1,0 +1,14 @@
+th, td{
+    border: solid;
+    padding: 10px;
+    text-align: center;
+}
+#account_count_on_page {
+    margin-left: 10px;
+}
+.createBlock p{
+    display: inline-block;
+}
+.createBlock div{
+    height: 40px;
+}
